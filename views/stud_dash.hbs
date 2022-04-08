@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard</title>
+    <link rel="stylesheet" href="../ha_dash.css">
+    <link rel="stylesheet" href="../ha_dash_new.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="../ha_dash_new.js"></script>
+</head>
+
+    <body id="body-pd">
+    <div class="body-style">
+        <header class="header" id="header">
+            <div class="header_toggle"> <i class="fas fa-bars" id="header-toggle"></i> </div>
+            <nav><div class="header-logo">
+                <img class="logo-1" src="../images/tatva_final1.png" alt="Tatv">
+                <span><img class="logo-2" src="../images/logo.png" alt="Banasthali Vidyapith"></span>
+            </div></nav>
+        </header>   
+        <header>
+            <nav class="header-navigation">
+                <ul class="nav-content">
+                    <li class="li-items" ><a href="/contact">CONTACT US</a></li>
+                    <li class="li-items" ><a href="/about">ABOUT US</a></li>
+                    <li class="li-items" ><a href="/">HOME</a></li>
+                </ul>
+            </nav>
+        </header>
+    </div>    
+        <div class="l-navbar" id="nav-bar">
+            <nav class="nav">
+                <div><a href="/changepassword" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
+                    <div class="nav_list"> 
+                        <a href="/stud_dash" class="nav_link active"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
+                        <a href="/auth/bookAppointment" class="nav_link "> <i class="fa fa-user-md" aria-hidden="true"></i> <span class="nav_name">Appointment</span> </a>
+                        <a href="/auth/bookLabTest" class="nav_link"> <i class="fa fa-flask" aria-hidden="true"></i> <span class="nav_name">Lab Test</span></a> 
+                        {{!-- <a href="#" class="nav_link"> <i class="fa fa-medkit" aria-hidden="true"></i> <span class="nav_name">Medicines</span> </a>  --}}
+                    </div>
+                </div> 
+                <a href="/" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
+            </nav>
+        </div>
+
+
+
+            <table class="body-table1" id="dash-table1">
+                
+                <tr>
+                    <td id="th1" colspan="6">Doctor's Appointments</td>
+                </tr>
+                
+                <tr>
+                    <tr>
+                    <th id="th2">Token NO.</th>
+                    <th>Name</th>
+                    <th>Doctor ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    </tr>
+                </tr>
+                
+                <tbody>
+                {{#each rows}}
+                <tr id="tr1" >
+                   <td>{{this.token-no}}</td> 
+                   <td>{{this.name}}</td>
+                   <td>{{this.doctor_id}}</td>
+                   <td>{{this.date}}</td>
+                   <td>{{this.time}}</td>
+                   <td>{{this.status}}</td>
+                   {{!-- <td><input type="radio" name="status" value="Visited">Visited<br>
+                    <input type="radio" name="status" value="Not Visited">Not Visited</td> --}}
+                </tr>
+                {{/each}}
+                </tbody>
+
+                {{!-- <tr id="tr1">
+                    <td>1</td> 
+                    <td>XYZ</td>
+                    <td>ABC</td>
+                    <td>21-02-2022</td>
+                    <td>3:15</td>
+                    <td><input type="radio" name="status" value="Visited">Visited<br>
+                     <input type="radio" name="status" value="Not Visited">Not Visited</td>
+                 </tr> --}}
+                 
+                
+            </table>
+
+            {{!-- second table  --}}
+            <table class="body-table2" id="dash-table1">
+                <tr>
+                    <td id="th1" colspan="8">Lab Tests Appointments</td>
+                </tr>
+                <tr>
+                    <tr>
+                    <th id="th2">Token NO.</th>
+                    <th>Name</th>
+                    <th>Test ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    </tr>
+                </tr>
+                <tbody>
+                    {{#each result}}
+                <tr>
+                   <td>{{this.token_lab}}</td> 
+                   <td>{{this.name_lab}}</td>
+                   <td>{{this.test_id}}</td>
+                   <td>{{this.date_lab}}</td>
+                   <td>{{this.time_lab}}</td>
+                   <td>{{this.status_lab}}</td>
+                   {{!-- <td><input type="radio" name="status" value="Visited">Visited<br>
+                    <input type="radio" name="status" value="Not Visited">Not Visited</td> --}}
+                </tr>
+                 {{/each}}
+                </tbody>
+                {{!-- <tr>
+                    <td>1</td> 
+                    <td>XYZ</td>
+                    <td>Haemoglobin</td>
+                    <td>Urine</td>
+                    <td>Blood</td>
+                    <td>21-02-2022</td>
+                    <td>3:15</td>
+                    <td><input type="radio" name="status" value="Visited">Visited<br>
+                     <input type="radio" name="status" value="Not Visited">Not Visited</td>
+                 </tr> --}}
+            </table>
+            
+        
+    </div>
+</body>
+</html>
