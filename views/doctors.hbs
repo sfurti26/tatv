@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/dashboard.css">
+    <script src="/dashboard.js"></script>
+    <script src="/doctors.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="/doctors.css">
+    <title>Doctors</title>
+</head>
+<body id="body-pd">
+    <div class="body-style">
+        <header class="header" id="header">
+            <div class="header_toggle"> <i class="fas fa-bars" id="header-toggle"></i> </div>
+            <nav><div class="header-logo">
+                <img class="logo-1" src="../images/tatva_final1.png" alt="Tatv">
+                <span><img class="logo-2" src="../images/logo.png" alt="Banasthali Vidyapith"></span>
+            </div></nav>
+        </header>   
+        <header>
+            <nav class="header-navigation">
+                <ul class="nav-content">
+                    <li class="li-items" ><a href="/contact">CONTACT US</a></li>
+                    <li class="li-items" ><a href="/about">ABOUT US</a></li>
+                    {{!-- <li class="li-items" ><a href="/">HOME</a></li> --}}
+                </ul>
+            </nav>
+        </header>
+    </div>    
+        <div class="l-navbar" id="nav-bar">
+            <nav class="nav">
+                <div><a href="/changepassword" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
+                    <div class="nav_list"> 
+                        <a href="/hadash" class="nav_link"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
+                        <a href="/doctors" class="nav_link active"> <i class="fa fa-user-md" aria-hidden="true"></i> <span class="nav_name">Doctor</span> </a>
+                        <a href="/upload" class="nav_link"> <i class="fa fa-flask" aria-hidden="true"></i> <span class="nav_name">View Lab Test</span></a> 
+                        <a href="/haviewappo" class="nav_link"> <i class="fa fa-medkit" aria-hidden="true"></i> <span class="nav_name">View Appointment</span> </a> 
+                    </div>
+                </div> 
+                <a href="/" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
+            </nav>
+        </div>  
+    <h2>Doctors</h2>
+    <table id="doctors">
+        <tr>
+            <tr>
+                <th>Name</th>
+                <th>Speciality</th>
+                <th>Email</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Contact</th>
+                <th>Address</th>
+                <th></th>
+            </tr>
+            <tr>
+                <form action="/auth/doctors" method="POST">
+                <td><input type="text" name="name" required></td>
+                <td><input type="text" name="specialty" required></td>
+                <td><input type="email" name="email" required></td>
+                <td><input type="date" name="date"></td>
+                <td><input type="time" name="time1"> - <input type="time" name="time2"></td>
+                <td><input type="tel" name="tel" required></td>
+                <td><input type="text-box" name="address"></td>
+                <td><input type="submit" value="Add"></td>
+                </form> 
+            </tr>
+        </tr>
+    </table>
+    </div class="alert-container">
+        {{#if message }}
+        <h4 class="alert alert-danger mt-4">{{message}}</h4>
+        {{/if}}
+    </div>
+    <br><br><br>
+    <table id="doctors">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Specialty</th>
+      <th scope="col">Email</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Contact</th>
+      <th scope="col">Address</th>
+      <th scope="col">Action</th>
+    </tr>
+  </thead>
+  <tbody>
+      {{#each rows}}
+    <tr>
+      <td>{{this.doc_name}}</td>
+      <td>{{this.specialty}}</td>
+      <td>{{this.doc_email}}</td>
+      <td>{{this.doc_day}}</td>
+      <td>{{this.doc_time1}}-{{this.doc_time2}}</td>
+      <td>{{this.doc_contact}}</td>
+      <td>{{this.address}}</td>
+      <td><a href="/edit-doctors/{{this.Id}}"><i class="fas fa-edit"></i></a>&nbsp&nbsp<a href="/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
+    </tr>
+    
+    {{/each}}
+  </tbody>
+</table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+</body>
+</html>

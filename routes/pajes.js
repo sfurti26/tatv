@@ -1,10 +1,14 @@
 const express= require('express');
 const authController = require('../controllers/auth');
 const router=express.Router();
+const multer = require('multer');
 
 router.get('/',(req,res)=>{
     res.render('home');
 });
+// router.get('/auth',(req,res)=>{
+//     res.render('home');
+// });
 
 router.get('/register',(req,res)=>{
     res.render('register');
@@ -31,13 +35,31 @@ router.get('/bookAppointment', (req, res)=>{
 router.get('/bookLabTest',(req,res)=>{
     res.render('bookLabTest');
 });
-router.get('/upload',(req,res)=>{
-    res.render('upload');
-});
+// router.get('/upload',(req,res)=>{
+//     res.render('upload');
+// });
 
 router.get('/haviewappo', authController.viewappoall);
-router.get('/update',authController.fetch);
-router.post('/update',authController.update);
+router.get('/doctors',authController.fetch);
+router.post('/doctors',authController.add);
+router.get('/upload',authController.upload);
 router.get('/hadash',authController.viewappo);
+router.get('/edit-doctors/:Id',authController.edit);
+router.post('/edit-doctors/:Id',authController.update);
+router.get('/:Id',authController.deleteDoc);
+// router.get('/home',authController.logout);
+router.get('/logout',authController.logout);
+// router.post('/upload',authController.report);
+// router.get('/:Lab_token',authController.report);
+// router.get('/logout',(req,res) => {
+//     req.session.destroy((err) => {
+//         if(err) {
+//             return console.log(err);
+//         }
+//         res.redirect('/');
+//     });
+
+// });
+// np
 
 module.exports=router;
