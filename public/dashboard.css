@@ -32,7 +32,7 @@ a {
 .fa{
     color: white;
 }
-.fa-trash{
+.fa-trash,.fa-edit{
     color:black;
 }
 .header {

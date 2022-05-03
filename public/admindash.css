@@ -1,0 +1,168 @@
+
+
+/* SFURTI CODE FOR CSS */
+body{
+    background-color: #FDFBF4;
+    /* counter-reset: Serial; */
+}
+body-style{
+  /* top: 0px;
+  left: 0px;
+  width: 1920px;
+  height: 2057px;
+  background: #FDFBF4 0% 0% no-repeat padding-box;
+  opacity: 1; */
+  /* Layout Properties */
+  
+  top: 0px;
+  left: 0px;
+   width: 1920px; 
+  height: 2057px;
+/* UI Properties */
+  background: #FDFBF4 0% 0% no-repeat padding-box;
+  opacity: 1;
+  overflow-x: hidden;
+}
+h1{
+    /* top: 305px;
+left: 678px;
+width: 256px;
+height: 48px; */
+/* UI Properties */
+text-align: center;
+font: normal normal normal 35px/50px Cardo;
+letter-spacing: 0px;
+color: #6C340F;
+opacity: 1;
+}
+#th1{
+    text-align: center;
+font: normal normal normal 25px/40px Cardo;
+letter-spacing: 0px;
+color: #6C340F;
+opacity: 1;
+}
+
+#dash-table1 {
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 5% ;
+  }
+  
+  #dash-table1 td, #dash-table1 th {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #dash-table1 tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #dash-table1 tr:hover {background-color: #ddd;}
+  
+  #dash-table1 th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #6C340F;
+    color: white;
+  }
+  .container{  
+    text-align: center;  
+    padding-bottom: 10px; 
+    }  
+  
+  ::-webkit-scrollbar{
+      display: none;
+  }
+  .header-logo{
+      background-color: #fffcf5;     
+  }
+  
+  .logo-1{
+      position: relative;
+      height: 5%;
+      width: 8.7%;
+      margin-top: 8px;
+      /* margin-left: 10px;  */
+      left: 220px;
+      margin-top: 0.5%;
+      margin-left: 1.2%;
+      padding-top: 7px;
+      padding-left: 5px;
+      object-fit: cover; 
+  }
+  
+  .logo-2{
+      float: right;
+      position: relative;
+      height: 0.3%;
+      width: 5.2%;
+      top: 0.5%;
+      /* right: 1.9%;  */
+      right: 270px;
+      /* left:1000px */
+      padding-top: 5px;
+      padding-right: 5px;
+      object-fit: cover; 
+  }
+  
+  @keyframes movedown{
+      0%{
+          transform: translateY(-100px);
+          visibility: visible;
+      }
+      100%{
+          transform: translateY(0);
+          visibility: visible;
+      }
+  }
+  .header-navigation{
+    
+      margin-top: 20px;
+      width:100%;
+      height: 30px; 
+  
+  }
+  
+  .nav-content{
+      color: white;
+      font-size: 98%;
+      list-style-type: none;
+      padding: 1.5%;
+      padding-right: 20%;
+      margin-top: 3.8%;
+      overflow:hidden;
+      background-color: #6d350f;
+      left: 0px;
+     
+   }
+  
+  .li-items{
+      float: right;
+      position: relative;
+      margin: 0 0 0 55px;
+      cursor: pointer;
+  }
+  .li-items::after{
+      content: '';
+      width: 0%;
+      height: 2px;
+      background: #FDFBF4;
+      display:block;
+      margin: auto;
+      transition: 0.5s;
+  }
+  .li-items:hover::after{
+      width: 100%;
+      pointer-events: auto;
+  }
+  .li-items a{
+      text-decoration: none;
+      color: white;
+  }
+  .li-items a:active{
+      color: #6d350f;
+      background-color: #ECB390;
+      
+  }    
+ 

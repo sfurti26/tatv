@@ -12,8 +12,6 @@
     <link rel="stylesheet" href="/bookApp.css">
     <link rel="stylesheet" href="/dashboard.css">
     <script src="/dashboard.js"></script>
-    {{!-- <link rel="stylesheet" href="../ha_dash.css"> --}}
-    {{!-- <script src="../ha_dash_new.js"></script> --}}
     <title>Book Lab Test</title>
 </head>
 
@@ -31,7 +29,7 @@
               <ul class="nav-content">
                   <li class="li-items" ><a href="/contact">CONTACT US</a></li>
                   <li class="li-items" ><a href="/about">ABOUT US</a></li>
-                  <li class="li-items" ><a href="/">HOME</a></li>
+                  {{!-- <li class="li-items" ><a href="/">HOME</a></li> --}}
               </ul>
           </nav>
       </header>
@@ -40,13 +38,13 @@
       <nav class="nav">
           <div><a href="/changepassword" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
               <div class="nav_list"> 
-                  <a href="/stud_dash" class="nav_link"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
+                  <a href="/auth/stud_dash" class="nav_link"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
                   <a href="/auth/bookAppointment" class="nav_link"> <i class="fa fa-user-md" aria-hidden="true"></i> <span class="nav_name">Appointment</span> </a>
                   <a href="/auth/bookLabTest" class="nav_link active"> <i class="fa fa-flask" aria-hidden="true"></i> <span class="nav_name">Lab Test</span></a> 
                   {{!-- <a href="#" class="nav_link"> <i class="fa fa-medkit" aria-hidden="true"></i> <span class="nav_name">Medicines</span> </a>  --}}
               </div>
           </div> 
-          <a href="/" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
+          <a href="/auth/logout" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
       </nav>
   </div>
 
@@ -57,7 +55,7 @@
         <h2>BOOK LAB TEST</h2>
           <div class="inputBox">
             <input type="text" required="required" id="studentid" name="student_id">
-            <span>Student ID</span>
+            <span>Banasthali ID</span>
           </div>
           <div class="inputBox">
             <input type="date" required="required" id="Date" name="Date">
@@ -87,7 +85,7 @@
     </div>
     <div class="sec-table">
       <table class="table">
-        <thead>
+        <thead><h3>Available Tests</h3>
           <tr>
             <th scope="col">TEST ID</th>
             <th scope="col">TEST NAME</th>
@@ -105,8 +103,6 @@
   </div>
 </section>
 
-
-{{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
 </body>
 </html>
 

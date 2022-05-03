@@ -1,13 +1,6 @@
 const mysql = require("mysql");
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
-const async = require("hbs/lib/async");
-const e = require("express");
-const cookieParser = require('cookie-parser');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const res = require("express/lib/response");
-const { NULL } = require("mysql/lib/protocol/constants/types");
 const dotenv=require("dotenv");
 
 dotenv.config({path: './.env'});
@@ -30,12 +23,6 @@ const db = mysql.createConnection({
 
 exports.register = (req, res) => {
     console.log(req.body);
-
-    // const name=req.body.name;
-    // const email=req.body.email;
-    // const password=req.body.password;
-    // const passwordConfirm=req.body.passwordConfirm;
-    // Can be written in this manner as well
 
     const { usertype, name, email, password, passwordConfirm } = req.body;
 
@@ -79,23 +66,14 @@ exports.login = (req, res) => {
         }
 
         if (results.length > 0) {
-            // console.log(password);
-            // console.log(results);
-            // console.log(results[0].Password);
-            // console.log(results[0].Name);
-            // console.log(results[0].usertype);
-            // console.log(results);
-            // console.log(results[0].Email);
+         
             bcrypt.compare(password, results[0].Password, function (error, result) {
                 if (error) {
                     console.log(error);
                 }
-                //console.log(result);
+
                 if (result) {
-                    // req.session.loggedIn = true;
-                    // req.session.username = results[0].Name;
-                    // req.session.email = results[0].Email;
-                    // req.session.bvId=results[0].Banasthali_Id;
+                    
                     const id=results[0].Email;
                     const token = jwt.sign({ id }, process.env.JWT_SECRET, {
                         expiresIn: process.env.JWT_EXPIRES_IN
@@ -111,24 +89,25 @@ exports.login = (req, res) => {
                     req.session.username = results[0].Name;
                     req.session.email = results[0].Email;
                     req.session.bvId=results[0].Banasthali_Id;
+                    req.session.Id=results[0].Id
 
                     res.cookie('jwt', token, cookieOptions);
-                    // res.status(200).redirect('/profile');
-                    // req.session.user=results;
-                    // console.log(req.session.user);
-                    if (results[0].usertype == 'Student') {
-                        // req.session.user = results;
-                        // console.log(req.session.user);
-                        // return res.render('/stud_dash', { email: req.user.email });
-                        // return res.redirect('/auth/stud_dash');                
+                    
+                    if (results[0].usertype == 'Student' && req.session.loggedIn) {
+                                      
                         res.status(200).redirect('/auth/stud_dash');
-                    }
-                    // return res.redirect('/stud_dash');
-                    if (results[0].usertype == 'Hospital Administrator') {
+                    }else if (results[0].usertype == 'Hospital Administrator' && req.session.loggedIn) {
                         // req.session.user = results;
                         // console.log(req.session.user);
                         return res.redirect('/hadash');
                         // res.status(200).redirect('/auth/stud_dash');
+                    }else if (results[0].usertype == 'Administrator' && req.session.loggedIn) {
+                        // req.session.user = results;
+                        // console.log(req.session.user);
+                        return res.redirect('/admindash/student');
+                        // res.status(200).redirect('/auth/stud_dash');
+                    }else{
+                        return res.render('login');
                     }
                     // return res.redirect('/hadash');
                     // return res.render('login', {
@@ -152,29 +131,14 @@ exports.login = (req, res) => {
 }
 
 exports.viewappostd = (req, res) => {
-    // console.log("**************");
-    // console.log(req.session.username);
-    // console.log("--------------");
-    // console.log(req.session.loggedIn)
-    // if (req.session.loggedIn) {
-    // 	// Output username
-    // 	res.send('Welcome back, ' + req.session.username + '!');
-
-    // } else {
-    // 	// Not logged in
-    // 	res.send('Please login to view this page!');
-    // }
-    // res.end();
     const mail = req.session.email;
-    if (req.session.loggedIn){
-    db.query('SELECT users.Name, bookappoint.Bv_Id, doctors.doc_name,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.problem FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE users.Email = ? ',[mail],function (err, rows) {
+    if (mail && req.session.loggedIn){
+    db.query('SELECT users.Name, bookappoint.Bv_Id, bookappoint.Status, doctors.doc_name,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.problem FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE users.Email = ? ',[mail],function (err, rows) {
         if (err) {
-        // done();
         console.error(err);
         res.send("Error: " + err.message);
     } else {
-        db.query('SELECT users.Name, users.Banasthali_Id,test.Id, test.test_name, booklab.Date FROM users INNER JOIN booklab ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID WHERE users.Email=?',[mail], function (err, result) {
-            // done();
+        db.query('SELECT users.Name, users.Banasthali_Id,test.Id, test.test_name, booklab.Status, booklab.Report, booklab.Date FROM users INNER JOIN booklab ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID WHERE users.Email=?',[mail], function (err, result) {
             if (err) {
                 console.error(err);
                 res.send("Error: " + err.message);
@@ -190,6 +154,9 @@ exports.viewappostd = (req, res) => {
     }
 });
     }
+    else{
+        return res.render('login')
+    }
 }
 exports.bookAppointment = (req, res) => {
     console.log(req.body);
@@ -197,24 +164,7 @@ exports.bookAppointment = (req, res) => {
     const { studentid, problem, Date, docid } = req.body;
     const mail=req.session.email;
 
-    // db.query('SELECT user_id FROM bookappoint WHERE user_id = ?', [studentid], (err, results) => {
-    //     // db.query('SELECT Id FROM users WHERE Email= ?', [mail], (err, results) => {
-    //     if (err) {
-    //         console.log(err);
-    //     }
-
-        // if (results.length > 0) {
-
-        //     return db.query('SELECT * FROM doctors where doc_day=curdate()', (err, rows) => {
-        //         if (err) {
-        //             console.log(err);
-        //         }
-        //         else {
-        //             res.render('bookAppointment', { rows, message: 'Appointment already booked' });
-        //         }
-        //         console.log('The data from the user table: \n', rows);
-        //     });
-        // }
+    if(mail && req.session.loggedIn){
         db.query('INSERT INTO bookappoint SET ? ', { Bv_id: studentid, problem: problem, Date: Date, doc_id: docid }, (error, results) => {
             if (error) {
                 console.log(error);
@@ -228,10 +178,12 @@ exports.bookAppointment = (req, res) => {
                     else {
                         res.render('bookAppointment', { rows, message: 'Appointment booked!' });
                     }
-                    console.log('The data from the user table: \n', rows);
+                    console.log('The data from the user table(BOOK APPOINTMENT): \n', rows);
                 });
             }
         });
+    }
+    else return res.render('login');
     // });
 }
 
@@ -243,7 +195,7 @@ exports.doc = (req, res) => {
         else {
             res.render('bookAppointment', { rows });
         }
-        console.log('The data from the user table: \n', rows);
+        console.log('The data from the user table(DOC): \n', rows);
     });
 }
 exports.bookLabTest = (req, res) => {
@@ -254,25 +206,15 @@ exports.bookLabTest = (req, res) => {
     const Date = req.body.Date;
     const tid = req.body.test_id;
 
-    // db.query('SELECT * FROM test',(err, rows)=>{
-    //     if(err){
-    //         console.log(err);
-    //     }
-    //     else{
-    //         res.render('bookLabTest', { rows ,message:"Appointment Booked" });
-    //     }
-    //     console.log('The data from the user table: \n', rows);
-    // });
+    const mail=req.session.email;
+    if(mail && req.session.loggedIn){
 
-    //for inserting values into the database
     db.query('INSERT INTO booklab SET ?', { Test_ID: tid, Bv_id: sid, Date: Date }, (error, results) => {
         if (error) {
             console.log(error);
         } else {
             console.log(results);
-            /* return res.render('bookLabTest',{
-            message: 'Appointment Booked'
-            }) */
+          
             return db.query('SELECT * FROM test', (err, rows) => {
                 if (err) {
                     console.log(err);
@@ -280,10 +222,14 @@ exports.bookLabTest = (req, res) => {
                 else {
                     res.render('bookLabTest', { rows, message: "Appointment Booked" });
                 }
-                console.log('The data from the user table: \n', rows);
+                console.log('The data from the user table (BOOK LABTEST): \n', rows);
             });
         }
     });
+}
+else{
+    return res.render('login');
+}
 
 }
 
@@ -295,7 +241,7 @@ exports.view = (req, res) => {
         else {
             res.render('bookLabTest', { rows });
         }
-        console.log('The data from the user table: \n', rows);
+        console.log('The data from the user table(VIEW): \n', rows);
     });
 }
 exports.upload = (req, res) => {
@@ -356,8 +302,9 @@ exports.fetch = (req, res) => {
     });
 }
 exports.viewappo = (req, res) => {
-
-    db.query('SELECT bookappoint.token,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE doctors.doc_day=CURRENT_DATE', function (err, rows) {
+    const mail=req.session.email;
+    if(mail && req.session.loggedIn){
+    db.query('SELECT bookappoint.token,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.Status FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE doctors.doc_day=CURRENT_DATE', function (err, rows) {
         if (err) {
             // done();
             console.error(err);
@@ -379,11 +326,15 @@ exports.viewappo = (req, res) => {
             });
         }
     });
+}
+else{
+    res.render('login');
+}
 
 
 }
 exports.viewappoall = (req, res) => {
-    db.query('SELECT bookappoint.token,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id ORDER BY doctors.doc_day DESC', (err, rows) => {
+    db.query('SELECT bookappoint.token,bookappoint.Status,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id ORDER BY doctors.doc_day DESC', (err, rows) => {
 
         if (!err) {
             res.render('haviewappo', { rows });
@@ -396,6 +347,37 @@ exports.viewappoall = (req, res) => {
 
 
 }
+exports.appostat =(req,res)=>{
+   console.log(req.params.token);
+    db.query('SELECT bookappoint.token,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE bookappoint.token=? ORDER BY doctors.doc_day DESC',[req.params.token], (err, rows) => {
+        if (!err) {
+            res.render('appostat', { rows });
+        } else {
+            console.log(err);
+        }
+          //console.log('The data from doctors table(DELETE): \n', rows)
+    });
+}
+exports.appostatupdate=(req, res) => {
+    // User the connection
+    const{status}=req.body;
+    db.query('UPDATE bookappoint SET Status=? WHERE token=?', [status,req.params.token], (err, rows) => {
+        if (!err) {
+            // User the connection
+            db.query('SELECT bookappoint.token,bookappoint.Status, users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE bookappoint.token=? ORDER BY doctors.doc_day DESC',[req.params.token],(err, rows) => {
+                if (!err) {
+                    res.render('appostat', { rows, alert: `updated.` });
+                  } else {
+                    console.log(err);
+                  }
+                  //console.log('The data from doctors table(DELETE): \n', rows)
+            });
+        }else {
+            console.log(err);
+          }
+        });
+ }
+
 exports.edit = (req, res) => {
     // User the connection
     db.query('SELECT * FROM doctors WHERE Id = ?', [req.params.Id], (err, rows) => {
@@ -404,7 +386,7 @@ exports.edit = (req, res) => {
       } else {
         console.log(err);
       }
-      console.log('The data from user table: \n', rows);
+      console.log('The data from doctors table(EDIT): \n', rows);
     });
   }
 exports.update=(req,res)=>{
@@ -422,12 +404,11 @@ exports.update=(req,res)=>{
         } else {
           console.log(err);
         }
-        console.log('The data from user table: \n', rows);
+        console.log('The data from user table(UPDATE-1): \n', rows);
       });
     } else {
       console.log(err);
     }
-    console.log('The data from user table: \n', rows);
   });
 }
 exports.deleteDoc = (req, res) => {
@@ -438,42 +419,114 @@ exports.deleteDoc = (req, res) => {
       } else {
         console.log(err);
       }
-      console.log('The data from user table: \n', rows);
+      console.log('The data from doctors table(DELETE): \n', rows);
     });
 }
 
-// exports.report=(req,res)=>{
-//     const {status}= req.body;
-//     console.log("***********"+req.params.Lab_token+"***************");
-//     db.query('UPDATE bookLab SET Status=? WHERE Lab_token=?',[status,req.params.Lab_token],(err,files)=>{
-//         console.log("++++++++++++");
-//         console.log("In report");
-//         console.log("*********");
-//         if (!err) {
-//             // User the connection
-//             db.query('SELECT * FROM booklab WHERE Lab_token = ?', [req.params.Lab_token], (err, rows) => {
-              
-//               if (!err) {
-//                 res.redirect('upload', { rows, alert: `${Bv_id} has been updated.` });
-//               } else {
-//                 console.log(err);
-//               }
-//             //   console.log('The data from user table: \n', rows);
-//             });
-//           } else {
-//             console.log(err);
-//           }
-//           console.log("Last part of report *****************");
-//           console.log('The data from user table: \n', files);
-//   });
-// }
+exports.report=(req,res)=>{
+    console.log(req.files);
+    var file=req.files.pdf;
+    console.log(req.body);
+
+    const { pdf } = req.body;
+    console.log("$$$$$$$$$4");
+    console.log(file);
+    console.log("!!!!!!!11");
+    if (!pdf)
+                return res.status(400).send('No files were uploaded.');
+        var file = req.body.pdf;
+        console.log("*********");
+        console.log(file);
+        console.log("_____________");
+        // var img_name=file.name;
+         if(file.mimetype == "application/pdf" ){
+                                
+              file.mv('public/reports/'+file.name, function(err) {
+                            
+                if (err)
+                    return res.status(500).send(err);
+                db.query('UPDATE bookLab SET Report=? WHERE Lab_token=?',[pdf,req.params.Lab_token],(err,files)=>{
+                        res.redirect('upload');
+                });
+            });
+          } else {
+            message = "This format is not allowed , please upload file with '.pdf'";
+            res.render('index.ejs',{message: message});
+          }
+
+}
+exports.admin= (req, res) => {
+    console.log(req.params.usertype);
+    if(req.params.usertype =='student'){
+        console.log("*********In student*********");
+        db.query('SELECT Id,Banasthali_Id,Name,Email,Hostel,Contact FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.render('admindash', { rows });
+            }
+            console.log('The data from the user table(student): \n', rows);
+        });
+    }
+    if(req.params.usertype =='Hospital Administrator'){
+        console.log("*********In HA*********");
+        db.query('SELECT Id,Name,Email,Contact FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.render('hospitalAdministrator', { rows });
+            }
+            console.log('The data from the user table(HA): \n', rows);
+        });
+    }
+    if(req.params.usertype =='Administrator'){
+        db.query('SELECT Id,Name,Email,Contact FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                res.render('admin', { rows });
+            }
+            console.log('The data from the user table(admin): \n', rows);
+        });
+    }
+}
+exports.deleteUser = (req, res) => {
+    // User the connection
+    
+    db.query('SELECT usertype FROM users WHERE Id = ?', [req.params.Id], (err, results) => {
+        console.log(results);
+      if (!err) {
+          db.query('DELETE FROM users WHERE Id=? ', [req.params.Id], (error, rows) => {
+              if(!error){
+                if(results[0].usertype=='students'){
+                    res.redirect('/admindash/student');
+                  }
+                  else 
+                    res.redirect('/admindash/Hospital Administrator');
+                  
+                 
+              }
+             else {
+                console.log(err);
+              }
+              console.log('The data from uers table(DELETE): \n', rows);
+          });
+      } else {
+        console.log(err);
+      }
+});
+}
 
 exports.logout = (req,res) => {
     console.log("************");
     console.log("In log out right now");
-
-    res.clearCookie('jwt');
-    res.session.loggedIn=false;
+    req.session.loggedIn=false;
+    console.log(req.session.loggedIn)
+    req.session.email=null;
+    console.log(req.session.email)
     req.session.destroy((err) =>{
        res.redirect('/');
     })

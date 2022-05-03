@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/dashboard.css">
+    <script src="/dashboard.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <link rel="stylesheet" href="/admindash.css">
+    <title>Admin</title>
+    <style>
+        .link {
+            font-size: 98%;
+            list-style-type: none;
+            padding: 1.5%;
+            padding-right: 20%;
+            margin-top: 3.8%;
+            overflow: hidden;
+            left: 0px;
+        }
+
+        .items {
+            float: right;
+            position: relative;
+            margin: 0 150px 0 55px;
+            cursor: pointer;
+        }
+
+        .items::after {
+            content: '';
+            width: 0%;
+            height: 2px;
+            background: #6d350f;
+            display: block;
+            margin: auto;
+            transition: 0.5s;
+        }
+
+        .items:hover::after {
+            width: 100%;
+            pointer-events: auto;
+        }
+
+        .items a {
+            text-decoration: none;
+            color: #6d350f;
+        }
+
+        .li-items a:active {
+            color: #6d350f;
+
+        }
+    </style>
+</head>
+
+<body id="body-pd">
+    <div class="body-style">
+        <header class="header" id="header">
+            <div class="header_toggle"> <i class="fas fa-bars" id="header-toggle"></i> </div>
+            <nav>
+                <div class="header-logo">
+                    <img class="logo-1" src="../images/tatva_final1.png" alt="Tatv">
+                    <span><img class="logo-2" src="../images/logo.png" alt="Banasthali Vidyapith"></span>
+                </div>
+            </nav>
+        </header>
+        <header>
+            <nav class="header-navigation">
+                <ul class="nav-content">
+                    <li class="li-items"><a href="/contact">CONTACT US</a></li>
+                    <li class="li-items"><a href="/about">ABOUT US</a></li>
+                    {{!-- <li class="li-items"><a href="/">HOME</a></li> --}}
+                </ul>
+            </nav>
+        </header>
+    </div>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div><a href="/changepassword" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span
+                        class="nav_name"></span> </a>
+                <div class="nav_list">
+                    <a href="/admindash/student" class="nav_link active"> <i class="fa fa-th"
+                            aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a>
+                    {{!-- <a href="/doctors" class="nav_link active"> <i class="fa fa-user-md" aria-hidden="true"></i>
+                        <span class="nav_name">Doctor</span> </a>
+                    <a href="/upload" class="nav_link"> <i class="fa fa-flask" aria-hidden="true"></i> <span
+                            class="nav_name">View Lab Test</span></a>
+                    <a href="/haviewappo" class="nav_link"> <i class="fa fa-medkit" aria-hidden="true"></i> <span
+                            class="nav_name">View Appointment</span> </a> --}}
+                </div>
+            </div>
+            <a href="/auth/logout" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
+        </nav>
+    </div>
+    <div>
+        <ul class="link">
+            <li class="items"><a href="/admindash/Administrator">Admin</a></li>
+            <li class="items"><a href="/admindash/Hospital Administrator">Hospital Administrator</a></li>
+            <li class="items"><a href="/admindash/student">Students</a></li>
+        </ul>
+    </div>
+    {{{body}}}
+    {{!-- {{#if usertype "student"}} --}}
+    <div class="sec-table">
+        <table class="table"  >
+            <thead>
+                <tr>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Banasthali Id</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Hostel</th>
+                    <th scope="col">Conatct</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each rows}}
+                <tr>
+                    <th scope="row">{{this.Id}}</th>
+                    <td>{{this.Banasthali_Id}}</td>
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Email}}</td>
+                    <td>{{this.Hostel}}</td>
+                    <td>{{this.Contact}}</td>
+                    <td><a href="/delete/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    {{!-- <div class="sec-tableA">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">User ID</th>
+                    
+                    <th scope="col">Name</th>
+                    <th scope="col">Email</th>
+                   
+                    <th scope="col">Conatct</th>
+                    <th scope="col">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each rows}}
+                <tr>
+                    <th scope="row">{{this.Id}}</th>
+                    
+                    <td>{{this.Name}}</td>
+                    <td>{{this.Email}}</td>
+                   
+                    <td>{{this.Contact}}</td>
+                    <td><a href="/delete/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div> --}}
+    {{!-- {{/if}} --}}
+    {{!-- <br><br><br>
+    <table id="students">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Specialty</th>
+                <th scope="col">Email</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Contact</th>
+                <th scope="col">Address</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each rows}}
+            <tr>
+                <td>{{this.doc_name}}</td>
+                <td>{{this.specialty}}</td>
+                <td>{{this.doc_email}}</td>
+                <td>{{this.doc_day}}</td>
+                <td>{{this.doc_time1}}-{{this.doc_time2}}</td>
+                <td>{{this.doc_contact}}</td>
+                <td>{{this.address}}</td>
+                <td><a href="/edit-doctors/{{this.Id}}"><i class="fas fa-edit"></i></a>&nbsp&nbsp<a
+                        href="/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
+            </tr>
+
+            {{/each}}
+        </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script> --}}
+</body>
+
+</html>

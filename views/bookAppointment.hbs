@@ -29,7 +29,7 @@
               <ul class="nav-content">
                   <li class="li-items" ><a href="/contact">CONTACT US</a></li>
                   <li class="li-items" ><a href="/about">ABOUT US</a></li>
-                  <li class="li-items" ><a href="/">HOME</a></li>
+                  {{!-- <li class="li-items" ><a href="/">HOME</a></li> --}}
               </ul>
           </nav>
       </header>
@@ -38,13 +38,12 @@
       <nav class="nav">
           <div><a href="/changepassword" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
               <div class="nav_list"> 
-                  <a href="/stud_dash" class="nav_link"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
+                  <a href="/auth/stud_dash" class="nav_link"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
                   <a href="/auth/bookAppointment" class="nav_link active"> <i class="fa fa-user-md" aria-hidden="true"></i> <span class="nav_name">Appointment</span> </a>
                   <a href="/auth/bookLabTest" class="nav_link"> <i class="fa fa-flask" aria-hidden="true"></i> <span class="nav_name">Lab Test</span></a> 
-                  {{!-- <a href="#" class="nav_link"> <i class="fa fa-medkit" aria-hidden="true"></i> <span class="nav_name">Medicines</span> </a>  --}}
               </div>
           </div> 
-          <a href="/" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
+          <a href="/auth/logout" class="nav_link"><i class="fas fa-sign-out-alt"></i> <span class="nav_name">Sign Out</span> </a>
       </nav>
   </div>
 
@@ -55,7 +54,7 @@
         <h2>BOOK APPOINTMENT</h2>
           <div class="inputBox">
             <input type="text" required="required" id="studentid" name="studentid">
-            <span>Student ID</span>
+            <span>Banasthali Id</span>
           </div>
           <div class="inputBox">
             <textarea required="required" id="problem" name="problem"></textarea>
@@ -89,7 +88,7 @@
     </div>
     <div class="sec-table">
       <table class="table">
-        <thead>
+        <thead><h3>Available Doctor's for the Day</h3>
           <tr>
             <th scope="col">DOCTOR'S ID</th>
             <th scope="col">NAME</th>
@@ -112,7 +111,6 @@
 </section>
 
 
-{{!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> --}}
 </body>
 </html>
 
