@@ -50,13 +50,7 @@
             background-color: #6C340F;
             color: white;
         }
-
-        #labicon{
-            padding: 10px;
-            color: white;
-            text-decoration: none;
-            text-align: center;
-        }
+        
     </style>
 </head>
 
@@ -100,7 +94,9 @@
                     Out</span> </a>
         </nav>
     </div>
-    {{!-- <h2>Add Lab Tests</h2>
+  
+
+    <h2>Add Lab Tests</h2>
     <table id="test">
         <tr>
         <tr>
@@ -109,57 +105,9 @@
             <th>Action</th>
         </tr>
         <tr>
-            <form action="/doctors" method="POST">
+            <form action="/auth/addlabtest" method="POST">
                 <td><input type="text" name="testid" required></td>
                 <td><input type="text" name="testname" required></td>
-                <td><input type="submit" value="Add"></td>
-            </form>
-        </tr>
-        </tr>
-    </table>
-    <table id="test">
-        <thead class="thead-dark">
-            <tr>
-                <th scope="col">Test ID</th>
-                <th scope="col">Test Name</th>
-                <th scope="col">Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {{#each rows}}
-            <tr>
-                <td>{{this.Id}}</td>
-                <td>{{this.test_name}}</td>
-                <td><a href="/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
-            </tr>
-
-            {{/each}}
-        </tbody>
-    </table> --}}
-    <a href="/auth/addlabtest" id="labicon">ADD LAB TEST</a>
-    {{!-- <a href="/addlabtest"><i class="fas fa-edit"></i></a>&nbsp&nbsp --}}
-    <h2>Add Doctors</h2>
-    <table id="doctors">
-        <tr>
-        <tr>
-            <th>Name</th>
-            <th>Speciality</th>
-            <th>Email</th>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Contact</th>
-            <th>Address</th>
-            <th>Action</th>
-        </tr>
-        <tr>
-            <form action="/auth/doctors" method="POST">
-                <td><input type="text" name="name" required></td>
-                <td><input type="text" name="specialty" required></td>
-                <td><input type="email" name="email" required></td>
-                <td><input type="date" name="date"></td>
-                <td><input type="time" name="time1"> - <input type="time" name="time2"></td>
-                <td><input type="tel" name="tel" required></td>
-                <td><input type="text-box" name="address"></td>
                 <td><input type="submit" value="Add"></td>
             </form>
         </tr>
@@ -172,31 +120,21 @@
     {{/if}}
     </div>
     <br><br><br>
-    <table id="doctors">
+    <table id="test">
         <thead class="thead-dark">
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Specialty</th>
-                <th scope="col">Email</th>
-                <th scope="col">Date</th>
-                <th scope="col">Time</th>
-                <th scope="col">Contact</th>
-                <th scope="col">Address</th>
-                <th scope="col">Action</th>
+                <th>Test Id</th>
+                <th>Test Name</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {{#each rows}}
             <tr>
-                <td>{{this.doc_name}}</td>
-                <td>{{this.specialty}}</td>
-                <td>{{this.doc_email}}</td>
-                <td>{{this.doc_day}}</td>
-                <td>{{this.doc_time1}}-{{this.doc_time2}}</td>
-                <td>{{this.doc_contact}}</td>
-                <td>{{this.address}}</td>
-                <td><a href="/edit-doctors/{{this.Id}}"><i class="fas fa-edit"></i></a>&nbsp&nbsp<a
-                        href="/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
+                <td>{{this.Id}}</td>
+                <td>{{this.test_name}}</td>
+                
+                <td><a href="/deletetest/{{this.Id}}"><i class="fa fa-trash"></i></a></td>
             </tr>
 
             {{/each}}

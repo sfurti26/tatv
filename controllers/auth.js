@@ -471,32 +471,68 @@ exports.addtest = (req, res) => {
     const mail=req.session.email;
     console.log(req.body);
     const { testid, testname} = req.body;
-    if (mail && req.session.loggedIn){
-        // db.query('SELECT booklab.Lab_token,users.Name,users.Banasthali_Id,booklab.Test_ID,test.test_name, booklab.Date FROM booklab INNER JOIN users ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID ORDER By booklab.Date DESC', (error, rows) => {
-
-        //     if (error) {
-        //         console.log(error);
-        //     } else {
-        //         console.log(rows);
-        //         return res.render('upload', {rows});
-        //     }
-        // });
-        db.query('INSERT INTO test SET ?', { Id: testid, test_name: testname}, (error, results) => {
+    // if (mail && req.session.loggedIn){
+    db.query('SELECT Id FROM test WHERE Id=?',[testid], async (error, results) => {
+        if (error) {
+            console.log(error);
+        }
+        console.log(".........");
+        console.log(results);
+        if (results.length > 0) {
+            return db.query('SELECT * FROM test', (error, rows) => {
+                if (error) {
+                    console.log(error);
+                } else {
+                    console.log(rows);
+                    return res.render('addlabtest', { rows, message: 'Labtest already in Database' })
+                }
+            });
+        }
+        db.query('INSERT INTO test SET ?', { Id:testid, test_name: testname}, (error, results) => {
             if (error) {
                 console.log(error);
             } else {
                 console.log(results);
-                db.query('SELECT booklab.Lab_token,users.Name,users.Banasthali_Id,booklab.Test_ID,test.test_name, booklab.Date FROM booklab INNER JOIN users ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID ORDER By booklab.Date DESC', (error, rows) => {
-
+                return db.query('SELECT * FROM test', (error, rows) => {
                     if (error) {
                         console.log(error);
                     } else {
                         console.log(rows);
-                        return res.render('upload', {rows});
+                        return res.render('addlabtest', { rows, message: 'Lab Test updated' })
                     }
                 });
             }
-        });
+        })
+    });
+// }else return res.render('login');
+}
+
+exports.fetchtest = (req, res) => {
+    console.log("in fetch....");
+    db.query('SELECT * FROM test', (error, rows) => {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(rows);
+            return res.render('addlabtest', { rows })
+        }
+    });
+}
+
+exports.deleteTest = (req, res) => {
+    // User the connection
+   
+    console.log(req.params.Id);
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
+    db.query('DELETE FROM test WHERE Id = ?', [req.params.Id], (err, rows) => {
+      if (!err) {
+        res.redirect('addlabtest');
+      } else {
+        console.log(err);
+      }
+      console.log('The data from doctors table(DELETE): \n', rows);
+    });
 }else return res.render('login');
 }
 

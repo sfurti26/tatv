@@ -47,7 +47,7 @@ router.get('/appostat',(req,res)=>{
 router.get('/appostatdash',(req,res)=>{
     res.render('appostatdash');
 })
-router.get('labstatus',(req,res)=>{
+router.get('/labstatus',(req,res)=>{
     res.render('labstatus');
 })
 // router.get('/upload',(req,res)=>{
@@ -62,6 +62,7 @@ router.get('/hadash',authController.viewappo);
 router.get('/edit-doctors/:Id',authController.edit);
 router.post('/edit-doctors/:Id',authController.update);
 router.get('/:Id',authController.deleteDoc);
+router.get('/deletetest/:Id',authController.deleteTest);
 router.get('/delete/:Id',authController.deleteUser);
 router.get('/admindash/:usertype', authController.admin);
 router.post('/appostat/:token',authController.appostatupdate);

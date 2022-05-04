@@ -30,6 +30,9 @@ router.get('/doctors',authController.fetch);
 router.post('/doctors',authController.add);
 router.get('/haviewappo', authController.viewappoall);
 
+router.get('/addlabtest',authController.fetchtest);
+router.post('/addlabtest',authController.addtest)
+
 router.post('/upload',authController.addtest);
 
 router.get('/editUser',authController.editUser);
