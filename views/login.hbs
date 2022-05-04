@@ -44,22 +44,21 @@
                                 <input type="password" class="input" name="password" placeholder="Enter your password"
                                     required>
                             </div>
-                            <div class="text"><a href="#">Forgot password?</a></div>
                             <div class="button input-box">
                                 <input type="submit" value="Login">
                             </div>
                             <div class="text sign-up-text">Don't have an account yet? <a href="/register">Sign Up</a>
                             </div>
+                     </div class="alert-container">
+                        {{#if message }}
+                        <h4 class="alert alert-danger mt-4">{{message}}</h4>
+                        {{/if}}
+                    </div>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
-     </div class="alert-container">
-        {{#if message }}
-        <h4 class="alert alert-danger mt-4">{{message}}</h4>
-        {{/if}}
     </div>
 </body>
 </html>
