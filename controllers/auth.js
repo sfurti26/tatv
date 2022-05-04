@@ -30,7 +30,15 @@ exports.register = (req, res) => {
 
     const { usertype, name, email, password, passwordConfirm } = req.body;
 
-    
+    //EMAIL
+    if(emailValidator.validate(email)){
+    }
+    else{
+        return res.render('register', {
+            message: ' That email is invalid'
+        })
+    }
+
     // Create a schema
     var schema = new passwordValidator();
     schema
@@ -46,13 +54,6 @@ exports.register = (req, res) => {
     })
    }
 
-    if(emailValidator.validate(email)){
-    }
-    else{
-        return res.render('register', {
-            message: ' That email is invalid'
-        })
-    }
 
     db.query('SELECT email FROM users WHERE email=?', [email], async (error, results) => {
         if (error) {
