@@ -4,6 +4,8 @@ const bcrypt = require("bcryptjs");
 const dotenv=require("dotenv");
 
 const emailValidator=require('email-validator');
+var passwordValidator = require('password-validator');
+
 
 dotenv.config({path: './.env'});
 
@@ -28,6 +30,7 @@ exports.register = (req, res) => {
 
     const { usertype, name, email, password, passwordConfirm } = req.body;
 
+    //EMAIL
     if(emailValidator.validate(email)){
     }
     else{
@@ -35,6 +38,23 @@ exports.register = (req, res) => {
             message: ' That email is invalid'
         })
     }
+
+    // Create a schema
+    var schema = new passwordValidator();
+    schema
+    .is().min(8)                                    // Minimum length 8                                // Maximum length 100
+    .has().uppercase()                              // Must have uppercase letters                             // Must have lowercase letters
+    .has().digits(1)                                // Must have at least 2 digits
+    .has().not().spaces()                           // Should not have spaces
+
+    //PASSWORD
+   if(!schema.validate(password)){
+    return res.render('register', {
+        message: 'Password must contain atleast one digit,uppercase letter and 8 characters(space not allowed)'
+    })
+   }
+
+
     db.query('SELECT email FROM users WHERE email=?', [email], async (error, results) => {
         if (error) {
             console.log(error);
