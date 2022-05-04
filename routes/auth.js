@@ -17,6 +17,7 @@ const db=mysql.createConnection({
     password:process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
+
 router.post('/register',authController.register);
 router.post('/login',authController.login);
 router.get('/stud_dash', authController.viewappostd);
@@ -25,23 +26,22 @@ router.post('/bookAppointment', authController.bookAppointment);
 router.get('/bookLabTest',authController.view);
 router.post('/bookLabTest',authController.bookLabTest);
 router.get('/hadash', authController.viewappo);
-router.post('/upload',authController.report);
 router.get('/doctors',authController.fetch);
 router.post('/doctors',authController.add);
 router.get('/haviewappo', authController.viewappoall);
-router.get('/logout',authController.logout);
-// router.get('/admindash', authController.student);
-// router.post('/upload',authController.report);
-// router.post('/:Id',authController.deleteDoc);
-// router.get('/home',authController.logout);
-// router.get('/home',authController.home);
 
-// db.method.generateAuthToken = async function() {
-//     try{
-//         let token=jwt.sign({Id:this.Id}, process.env.SECRET_KEY)
-//     }catch(err){
-//         console.log(err);
-//     }
-// }
+router.post('/upload',authController.addtest);
+
+router.get('/editUser',authController.editUser);
+router.post('/editUser',authController.updateUser);
+
+router.get('/editHa',authController.editHa);
+router.post('/editHa',authController.updateHa);
+
+router.get('/editAdmin',authController.editAdmin);
+router.post('/editAdmin',authController.updateAdmin);
+
+router.get('/logout',authController.logout);
+
 
 module.exports = router;

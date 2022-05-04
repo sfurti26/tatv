@@ -9,6 +9,7 @@
     <script src="/doctors.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="/doctors.css">
+    <link rel="icon" href="../images/favicon.png" type="image/x-icon">
     <title>Doctors</title>
 </head>
 <body id="body-pd">
@@ -32,7 +33,7 @@
     </div>    
         <div class="l-navbar" id="nav-bar">
             <nav class="nav">
-                <div><a href="/changepassword" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
+                <div><a href="/auth/editHa" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
                     <div class="nav_list"> 
                         <a href="/hadash" class="nav_link"> <i class="fa fa-th" aria-hidden="true"></i><span class="nav_name">Dashboard</span> </a> 
                         <a href="/doctors" class="nav_link active"> <i class="fa fa-user-md" aria-hidden="true"></i> <span class="nav_name">Doctor</span> </a>
@@ -54,7 +55,7 @@
                 <th>Time</th>
                 <th>Contact</th>
                 <th>Address</th>
-                <th></th>
+                <th>Action</th>
             </tr>
             <tr>
                 <form action="/auth/doctors" method="POST">

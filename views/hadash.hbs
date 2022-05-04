@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="/ha_dash.css">
     <link rel="stylesheet" href="/ha_dash_new.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="icon" href="../images/favicon.png" type="image/x-icon">
     <script src="ha_dash_new.js"></script>
 </head>
 
@@ -35,7 +36,7 @@
     </div>
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
-            <div><a href="#" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span
+            <div><a href="/auth/editHa" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span
                         class="nav_name"></span> </a>
                 <div class="nav_list">
                     <a href="/hadash" class="nav_link active"> <i class="fa fa-th" aria-hidden="true"></i><span
@@ -85,9 +86,7 @@
                 <td>{{this.doc_day}}</td>
                 <td>{{this.doc_time1}}-{{this.doc_time2}}</td>
                 {{!-- <td>{{this.status}}</td> --}}
-                <td><input type="radio" name="status" value="Visited">Visited<br>
-                    <input type="radio" name="status" value="Not Visited">Not Visited
-                </td>
+                <td><a href="/appostatdash/{{this.token}}"><i class="fas fa-edit"></i></a>&nbsp{{this.Status}}</td>
             </tr>
             {{/each}}
         </tbody>
@@ -109,7 +108,7 @@
     {{!-- second table --}}
     <table class="body-table2" id="dash-table1">
         <tr>
-            <td id="th1" colspan="8">Lab Tests Appointments</td>
+            <td id="th1" colspan="7">Lab Tests Appointments</td>
         </tr>
         <tr>
         <tr>
@@ -119,7 +118,6 @@
             <th>Test_Id</th>
             <th>Test Name</th>
             <th>Date</th>
-            <th>Status</th>
             <th>Report</th>
 
         </tr>
@@ -133,25 +131,7 @@
                 <td>{{this.Test_ID}}</td>
                 <td>{{this.test_name}}</td>
                 <td>{{this.Date}}</td>
-                {{!-- <td>{{this.appoint_status}}</td>
-                <td>{{this.lab_report}}</td> --}}
-                {{!-- <td><input type="radio" name="status" value="Visited">Visited<br>
-                    <input type="radio" name="status" value="Not Visited">Not Visited
-                </td> --}}
-                <td>
-                    <form action=method="POST" action="/auth/upload">
-                        <input type="radio" name="status" value="{{this.Status}}">Visited<br>
-                        <input type="radio" name="status" value="{{this.Status}}">Not Visited
-                        {{!-- <button class="btn" type="submit">Submit</button> --}}
-                    </form>
-
-                </td>
-                <td>
-                    <form action="/auth/upload" enctype="multipart/form-data" method="POST">
-                        <input type="file" name="pdf" accept=".pdf" />
-                        <input type="submit" value="Upload">
-                    </form>
-                </td>
+                <td><a href="/labstatusdash/{{this.Lab_token}}"><i class="fas fa-edit"></i></a>&nbsp{{this.Status}}</td>
             </tr>
             {{/each}}
         </tbody>

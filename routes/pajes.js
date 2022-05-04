@@ -44,6 +44,9 @@ router.get('/hospitalAdministrator',(req,res)=>{
 router.get('/appostat',(req,res)=>{
     res.render('appostat');
 })
+router.get('/appostatdash',(req,res)=>{
+    res.render('appostatdash');
+})
 router.get('labstatus',(req,res)=>{
     res.render('labstatus');
 })
@@ -63,6 +66,8 @@ router.get('/delete/:Id',authController.deleteUser);
 router.get('/admindash/:usertype', authController.admin);
 router.post('/appostat/:token',authController.appostatupdate);
 router.get('/appostat/:token',authController.appostat);
+router.post('/appostatdash/:token',authController.appostatupdatedash);
+router.get('/appostatdash/:token',authController.appostatdash);
 // router.get('/labstatus/:Lab_token',authController.report);
 // router.post('/labstatus/:Lab_token',authController.reportupdate);
 // (req, res) => {

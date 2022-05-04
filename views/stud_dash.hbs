@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="../ha_dash_new.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <script src="../ha_dash_new.js"></script>
+    <link rel="icon" href="../images/favicon.png" type="image/x-icon">
 </head>
 
 <body id="body-pd">
@@ -35,8 +36,7 @@
     <div class="l-navbar" id="nav-bar">
         <nav class="nav">
 
-            <div>{{#if rows}}<a href="/edit-doctors/{{this.Id}}" class="nav_logo"> <i class="fa fa-user"
-                        aria-hidden="true"></i> <span class="nav_name"></span> </a>{{/if}}
+            <div><a href="/auth/editUser" class="nav_logo"> <i class="fa fa-user" aria-hidden="true"></i> <span class="nav_name"></span> </a>
                 <div class="nav_list">
                     <a href="/auth/stud_dash" class="nav_link active"> <i class="fa fa-th" aria-hidden="true"></i><span
                             class="nav_name">Dashboard</span> </a>
@@ -97,7 +97,6 @@
             <th>Test ID</th>
             <th>Test Name</th>
             <th>Date</th>
-            <th>Status</th>
             <th>Lab Report</th>
         </tr>
         </tr>
@@ -109,9 +108,8 @@
                 <td>{{this.Id}}</td>
                 <td>{{this.test_name}}</td>
                 <td>{{this.Date}}</td>
-                <td>{{this.Status}}</td>
                 <td>{{#if this.Report}}
-                    <img src="{{this.Report}}" alt="Lab report">
+                    <a href="../images/{{this.Report}}" target="_blank">Lab Report_{{this.Name}}</a>
                     {{/if}}
                 </td>
             </tr>

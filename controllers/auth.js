@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
 const dotenv=require("dotenv");
 
+const emailValidator=require('email-validator');
+
 dotenv.config({path: './.env'});
 
 
@@ -26,6 +28,13 @@ exports.register = (req, res) => {
 
     const { usertype, name, email, password, passwordConfirm } = req.body;
 
+    if(emailValidator.validate(email)){
+    }
+    else{
+        return res.render('register', {
+            message: ' That email is invalid'
+        })
+    }
     db.query('SELECT email FROM users WHERE email=?', [email], async (error, results) => {
         if (error) {
             console.log(error);
@@ -133,12 +142,12 @@ exports.login = (req, res) => {
 exports.viewappostd = (req, res) => {
     const mail = req.session.email;
     if (mail && req.session.loggedIn){
-    db.query('SELECT users.Name, bookappoint.Bv_Id, bookappoint.Status, doctors.doc_name,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.problem FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE users.Email = ? ',[mail],function (err, rows) {
+    db.query('SELECT users.Name, bookappoint.Bv_Id, bookappoint.Status, doctors.doc_name,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.problem FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE users.Email = ?',[mail],function (err, rows) {
         if (err) {
         console.error(err);
         res.send("Error: " + err.message);
     } else {
-        db.query('SELECT users.Name, users.Banasthali_Id,test.Id, test.test_name, booklab.Status, booklab.Report, booklab.Date FROM users INNER JOIN booklab ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID WHERE users.Email=?',[mail], function (err, result) {
+        db.query('SELECT users.Name, users.Banasthali_Id,test.Id, test.test_name,booklab.Report, booklab.Date FROM users INNER JOIN booklab ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID WHERE users.Email=?',[mail], function (err, result) {
             if (err) {
                 console.error(err);
                 res.send("Error: " + err.message);
@@ -158,6 +167,145 @@ exports.viewappostd = (req, res) => {
         return res.render('login')
     }
 }
+exports.editUser = (req, res) => {
+    // res.render('editUser');
+    // // User the connection
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
+    db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+      if (!err) {
+        res.render('editUser', { rows });
+        console.log(req.session.Id);
+      } else {
+        console.log(err);
+      }
+      console.log('The data from user table: \n', rows);
+    });
+
+}
+else return res.render('login');
+
+
+}
+
+
+exports.updateUser=(req,res)=>{
+    const { idbv, name,phone ,hostel} = req.body;
+  // User the connection
+  const mail=req.session.email;
+  if (mail && req.session.loggedIn){
+  db.query('UPDATE users SET Banasthali_Id = ?, Name = ?,phone = ?, hostel=? WHERE Id = ?', [idbv, name,phone,hostel, req.session.Id], (err, rows) => {
+
+    if (!err) {
+      // User the connection
+      db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+
+        if (!err) {
+          res.render('editUser', { rows, alert: `${name} has been updated.` });
+        } else {
+          console.log(err);
+        }
+        console.log('The data from user table: \n', rows);
+      });
+    } else {
+      console.log(err);
+    }
+    console.log('The data from user table: \n', rows);
+  });
+}else return res.render('login');
+}
+
+
+exports.editHa = (req, res) => {
+    // res.render('editUser');
+    // // User the connection
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
+    db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+      if (!err) {
+        res.render('editHa', { rows });
+        console.log(req.session.Id);
+      } else {
+        console.log(err);
+      }
+      console.log('The data from user table: \n', rows);
+    });
+}else return res.render('login');
+
+
+}
+
+exports.updateHa=(req,res)=>{
+    const { name,phone ,address} = req.body;
+  // User the connection
+  const mail=req.session.email;
+  if (mail && req.session.loggedIn){
+  db.query('UPDATE users SET  Name = ?,phone = ?, address=? WHERE Id = ?', [name,phone,address, req.session.Id], (err, rows) => {
+
+    if (!err) {
+      // User the connection
+      db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+
+        if (!err) {
+          res.render('editHa', { rows, alert: `${name} has been updated.` });
+        } else {
+          console.log(err);
+        }
+        console.log('The data from user table: \n', rows);
+      });
+    } else {
+      console.log(err);
+    }
+    console.log('The data from user table: \n', rows);
+  });
+}else return res.render('login');
+}
+
+exports.editAdmin = (req, res) => {
+    // res.render('editUser');
+    // // User the connection
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
+    db.query('SELECT * FROM users WHERE Id = ? AND email=?', [req.session.Id,mail], (err, rows) => {
+      if (!err) {
+        res.render('editAdmin', { rows });
+        console.log(req.session.Id);
+      } else {
+        console.log(err);
+      }
+      console.log('The data from user table: \n', rows);
+    });
+}else return res.render('login');
+
+
+}
+
+exports.updateAdmin=(req,res)=>{
+    const { name,phone ,address} = req.body;
+  // User the connection
+  const mail=req.session.email;
+  if (mail && req.session.loggedIn){
+  db.query('UPDATE users SET  Name = ?,phone = ?, address=? WHERE Id = ? AND email=?', [name,phone,address, req.session.Id,mail], (err, rows) => {
+
+    if (!err) {
+      // User the connection
+      db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+
+        if (!err) {
+          res.render('editAdmin', { rows, alert: `${name} has been updated.` });
+        } else {
+          console.log(err);
+        }
+        console.log('The data from user table: \n', rows);
+      });
+    } else {
+      console.log(err);
+    }
+    console.log('The data from user table: \n', rows);
+  });
+}else return res.render('login');
+}
+
 exports.bookAppointment = (req, res) => {
     console.log(req.body);
 
@@ -245,7 +393,9 @@ exports.view = (req, res) => {
     });
 }
 exports.upload = (req, res) => {
-    console.log("upload mein hai");
+    const mail=req.session.email;
+    
+    if (mail && req.session.loggedIn){
     db.query('SELECT booklab.Lab_token,users.Name,users.Banasthali_Id,booklab.Test_ID,test.test_name, booklab.Date FROM booklab INNER JOIN users ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID ORDER By booklab.Date DESC', (error, rows) => {
 
         if (error) {
@@ -255,10 +405,14 @@ exports.upload = (req, res) => {
             return res.render('upload', {rows});
         }
     });
+}else return res.render('login');
 }
+
 exports.add = (req, res) => {
+    const mail=req.session.email;
     console.log(req.body);
     const { name, specialty, email, date, time1, time2, tel, address } = req.body;
+    if (mail && req.session.loggedIn){
     db.query('SELECT doc_email FROM doctors WHERE doc_email=?', [email], async (error, results) => {
         if (error) {
             console.log(error);
@@ -290,7 +444,42 @@ exports.add = (req, res) => {
             }
         })
     });
+}else return res.render('login');
 }
+
+exports.addtest = (req, res) => {
+    const mail=req.session.email;
+    console.log(req.body);
+    const { testid, testname} = req.body;
+    if (mail && req.session.loggedIn){
+        // db.query('SELECT booklab.Lab_token,users.Name,users.Banasthali_Id,booklab.Test_ID,test.test_name, booklab.Date FROM booklab INNER JOIN users ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID ORDER By booklab.Date DESC', (error, rows) => {
+
+        //     if (error) {
+        //         console.log(error);
+        //     } else {
+        //         console.log(rows);
+        //         return res.render('upload', {rows});
+        //     }
+        // });
+        db.query('INSERT INTO test SET ?', { Id: testid, test_name: testname}, (error, results) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(results);
+                db.query('SELECT booklab.Lab_token,users.Name,users.Banasthali_Id,booklab.Test_ID,test.test_name, booklab.Date FROM booklab INNER JOIN users ON users.Banasthali_Id=booklab.Bv_id INNER JOIN test ON test.Id=booklab.Test_ID ORDER By booklab.Date DESC', (error, rows) => {
+
+                    if (error) {
+                        console.log(error);
+                    } else {
+                        console.log(rows);
+                        return res.render('upload', {rows});
+                    }
+                });
+            }
+        });
+}else return res.render('login');
+}
+
 exports.fetch = (req, res) => {
     db.query('SELECT * FROM doctors', (error, rows) => {
         if (error) {
@@ -334,6 +523,9 @@ else{
 
 }
 exports.viewappoall = (req, res) => {
+
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
     db.query('SELECT bookappoint.token,bookappoint.Status,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id ORDER BY doctors.doc_day DESC', (err, rows) => {
 
         if (!err) {
@@ -344,6 +536,7 @@ exports.viewappoall = (req, res) => {
 
         console.log("data from appointment table: \n", rows);
     });
+}else return res.render('login');
 
 
 }
@@ -377,9 +570,40 @@ exports.appostatupdate=(req, res) => {
           }
         });
  }
-
+ exports.appostatdash =(req,res)=>{
+    console.log(req.params.token);
+     db.query('SELECT bookappoint.token,users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE bookappoint.token=? ORDER BY doctors.doc_day DESC',[req.params.token], (err, rows) => {
+         if (!err) {
+             res.render('appostatdash', { rows });
+         } else {
+             console.log(err);
+         }
+           //console.log('The data from doctors table(DELETE): \n', rows)
+     });
+ }
+ exports.appostatupdatedash=(req, res) => {
+     // User the connection
+     const{status}=req.body;
+     db.query('UPDATE bookappoint SET Status=? WHERE token=?', [status,req.params.token], (err, rows) => {
+         if (!err) {
+             // User the connection
+             db.query('SELECT bookappoint.token,bookappoint.Status, users.Name,bookappoint.Bv_Id, doctors.doc_name,bookappoint.problem,doctors.doc_day,doctors.doc_time1,doctors.doc_time2 FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE bookappoint.token=? ORDER BY doctors.doc_day DESC',[req.params.token],(err, rows) => {
+                 if (!err) {
+                     res.render('appostatdash', { rows, alert: `updated.` });
+                   } else {
+                     console.log(err);
+                   }
+                   //console.log('The data from doctors table(DELETE): \n', rows)
+             });
+         }else {
+             console.log(err);
+           }
+         });
+  }
 exports.edit = (req, res) => {
     // User the connection
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
     db.query('SELECT * FROM doctors WHERE Id = ?', [req.params.Id], (err, rows) => {
       if (!err) {
         res.render('edit-doctors', { rows });
@@ -388,11 +612,14 @@ exports.edit = (req, res) => {
       }
       console.log('The data from doctors table(EDIT): \n', rows);
     });
+}else return res.render('login');
   }
 exports.update=(req,res)=>{
     // res.render('edit-doctors');
     const { name,specialty ,email,date,time1,time2,tel,address} = req.body;
   // User the connection
+  const mail=req.session.email;
+  if (mail && req.session.loggedIn){
   db.query('UPDATE doctors SET doc_name = ?,doc_email = ?, specialty=?, doc_contact = ?, address = ?,doc_day=?,doc_time1=?,doc_time2=? WHERE id = ?', [name,email,specialty,tel,address,date,time1,time2, req.params.Id], (err, rows) => {
 
     if (!err) {
@@ -410,9 +637,12 @@ exports.update=(req,res)=>{
       console.log(err);
     }
   });
+}else return res.render('login');
 }
 exports.deleteDoc = (req, res) => {
     // User the connection
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
     db.query('DELETE FROM doctors WHERE Id = ?', [req.params.Id], (err, rows) => {
       if (!err) {
         res.redirect('doctors');
@@ -421,45 +651,17 @@ exports.deleteDoc = (req, res) => {
       }
       console.log('The data from doctors table(DELETE): \n', rows);
     });
+}else return res.render('login');
 }
 
-exports.report=(req,res)=>{
-    console.log(req.files);
-    var file=req.files.pdf;
-    console.log(req.body);
 
-    const { pdf } = req.body;
-    console.log("$$$$$$$$$4");
-    console.log(file);
-    console.log("!!!!!!!11");
-    if (!pdf)
-                return res.status(400).send('No files were uploaded.');
-        var file = req.body.pdf;
-        console.log("*********");
-        console.log(file);
-        console.log("_____________");
-        // var img_name=file.name;
-         if(file.mimetype == "application/pdf" ){
-                                
-              file.mv('public/reports/'+file.name, function(err) {
-                            
-                if (err)
-                    return res.status(500).send(err);
-                db.query('UPDATE bookLab SET Report=? WHERE Lab_token=?',[pdf,req.params.Lab_token],(err,files)=>{
-                        res.redirect('upload');
-                });
-            });
-          } else {
-            message = "This format is not allowed , please upload file with '.pdf'";
-            res.render('index.ejs',{message: message});
-          }
-
-}
 exports.admin= (req, res) => {
     console.log(req.params.usertype);
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
     if(req.params.usertype =='student'){
         console.log("*********In student*********");
-        db.query('SELECT Id,Banasthali_Id,Name,Email,Hostel,Contact FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
+        db.query('SELECT Id,Banasthali_Id,Name,Email,hostel,phone FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
             if (err) {
                 console.log(err);
             }
@@ -471,7 +673,7 @@ exports.admin= (req, res) => {
     }
     if(req.params.usertype =='Hospital Administrator'){
         console.log("*********In HA*********");
-        db.query('SELECT Id,Name,Email,Contact FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
+        db.query('SELECT Id,Name,Email,phone,address FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
             if (err) {
                 console.log(err);
             }
@@ -482,7 +684,7 @@ exports.admin= (req, res) => {
         });
     }
     if(req.params.usertype =='Administrator'){
-        db.query('SELECT Id,Name,Email,Contact FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
+        db.query('SELECT Id,Name,Email,phone,address FROM users WHERE usertype=?',[req.params.usertype], (err, rows) => {
             if (err) {
                 console.log(err);
             }
@@ -492,16 +694,18 @@ exports.admin= (req, res) => {
             console.log('The data from the user table(admin): \n', rows);
         });
     }
+}else return res.render('login');
 }
 exports.deleteUser = (req, res) => {
     // User the connection
-    
+    const mail=req.session.email;
+    if (mail && req.session.loggedIn){
     db.query('SELECT usertype FROM users WHERE Id = ?', [req.params.Id], (err, results) => {
         console.log(results);
       if (!err) {
           db.query('DELETE FROM users WHERE Id=? ', [req.params.Id], (error, rows) => {
               if(!error){
-                if(results[0].usertype=='students'){
+                if(results[0].usertype=='Student'){
                     res.redirect('/admindash/student');
                   }
                   else 
@@ -518,6 +722,7 @@ exports.deleteUser = (req, res) => {
         console.log(err);
       }
 });
+    }else return res.render('login');
 }
 
 exports.logout = (req,res) => {
