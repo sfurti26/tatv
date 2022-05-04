@@ -24,6 +24,7 @@ dotenv.config({path: './.env'});
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     user: process.env.DATABASE_USER,
+    port: process.env.DATABASE_PORT,
     password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE
 });
@@ -90,29 +91,35 @@ exports.login = (req, res) => {
                 if (error) {
                     console.log(error);
                 }
-                //console.log(result);
+                console.log(results);
                 if (result) {
-                    // req.session.loggedIn = true;
-                    // req.session.username = results[0].Name;
-                    // req.session.email = results[0].Email;
-                    // req.session.bvId=results[0].Banasthali_Id;
-                    const id=results[0].Email;
-                    const token = jwt.sign({ id }, process.env.JWT_SECRET, {
-                        expiresIn: process.env.JWT_EXPIRES_IN
-                    });
-
-                    const cookieOptions = {
-                        expires: new Date(
-                            Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
-                        ),
-                        httpOnly: true
-                    }
                     req.session.loggedIn = true;
                     req.session.username = results[0].Name;
                     req.session.email = results[0].Email;
                     req.session.bvId=results[0].Banasthali_Id;
+                    req.session.Id=results[0].Id;
+                    // const id=results[0].Email;
+                    // const token = jwt.sign({ id }, `${process.env.JWT_SECRET}`, {
+                    //     expiresIn: process.env.JWT_EXPIRES_IN
+                    // });
 
-                    res.cookie('jwt', token, cookieOptions);
+                    // const token = jwt.sign(
+                    //     {id},
+                    //     {expiresIn: '60d'} 
+                    // )
+
+                    // const cookieOptions = {
+                    //     expires: new Date(
+                    //         Date.now() + process.env.JWT_COOKIE_EXPIRES * 24 * 60 * 60 * 1000
+                    //     ),
+                    //     httpOnly: true
+                    // }
+                    // req.session.loggedIn = true;
+                    // req.session.username = results[0].Name;
+                    // req.session.email = results[0].Email;
+                    // req.session.bvId=results[0].Banasthali_Id;
+
+                    // res.cookie('jwt', token, cookieOptions);
                     // res.status(200).redirect('/profile');
                     // req.session.user=results;
                     // console.log(req.session.user);
@@ -167,7 +174,7 @@ exports.viewappostd = (req, res) => {
     // res.end();
     const mail = req.session.email;
     if (req.session.loggedIn){
-    db.query('SELECT users.Name, bookappoint.Bv_Id, doctors.doc_name,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.problem FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE users.Email = ? ',[mail],function (err, rows) {
+    db.query('SELECT users.Id, users.Name, bookappoint.Bv_Id, doctors.doc_name,doctors.doc_day,doctors.doc_time1,doctors.doc_time2,bookappoint.problem FROM users INNER JOIN bookappoint ON users.Banasthali_Id = bookappoint.Bv_Id INNER JOIN doctors ON doctors.Id=bookappoint.doc_id WHERE users.Email = ? ',[mail],function (err, rows) {
         if (err) {
         // done();
         console.error(err);
@@ -467,14 +474,119 @@ exports.deleteDoc = (req, res) => {
 //           console.log('The data from user table: \n', files);
 //   });
 // }
+exports.editUser = (req, res) => {
+    // res.render('editUser');
+    // // User the connection
+    db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+      if (!err) {
+        res.render('editUser', { rows });
+        console.log(req.session.Id);
+      } else {
+        console.log(err);
+      }
+      console.log('The data from user table: \n', rows);
+    });
+
+    
+}
+
+
+exports.updateUser=(req,res)=>{
+    const { idbv, name,phone ,hostel,address} = req.body;
+  // User the connection
+  db.query('UPDATE users SET Banasthali_Id = ?, Name = ?,phone = ?, hostel=?, address=? WHERE Id = ?', [idbv, name,phone,hostel,address, req.session.Id], (err, rows) => {
+
+    if (!err) {
+      // User the connection
+      db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+        
+        if (!err) {
+          res.render('editUser', { rows, alert: `${name} has been updated.` });
+        } else {
+          console.log(err);
+        }
+        console.log('The data from user table: \n', rows);
+      });
+    } else {
+      console.log(err);
+    }
+    console.log('The data from user table: \n', rows);
+  });
+}
+
+
+exports.editHa = (req, res) => {
+    // res.render('editUser');
+    // // User the connection
+    db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+      if (!err) {
+        res.render('editHa', { rows });
+        console.log(req.session.Id);
+      } else {
+        console.log(err);
+      }
+      console.log('The data from user table: \n', rows);
+    });
+
+    
+}
+
+exports.updateHa=(req,res)=>{
+    const { name,phone ,address} = req.body;
+  // User the connection
+  db.query('UPDATE users SET  Name = ?,phone = ?, address=? WHERE Id = ?', [name,phone,address, req.session.Id], (err, rows) => {
+
+    if (!err) {
+      // User the connection
+      db.query('SELECT * FROM users WHERE Id = ?', [req.session.Id], (err, rows) => {
+        
+        if (!err) {
+          res.render('editHa', { rows, alert: `${name} has been updated.` });
+        } else {
+          console.log(err);
+        }
+        console.log('The data from user table: \n', rows);
+      });
+    } else {
+      console.log(err);
+    }
+    console.log('The data from user table: \n', rows);
+  });
+}
 
 exports.logout = (req,res) => {
     console.log("************");
     console.log("In log out right now");
+    console.log("************");
+    console.log("************");
+    console.log("************");
+    console.log("************");
 
-    res.clearCookie('jwt');
-    res.session.loggedIn=false;
-    req.session.destroy((err) =>{
-       res.redirect('/');
-    })
+    req.session=null;
+    // res.clearCookie('jwt');
+    // res.session.loggedIn=false;
+    
+    // req.session.destroy((err) =>{
+    //    res.redirect('/');
+    // })
+    // req.session.destroy((err) =>{
+    //     res.render('logout');
+    //  })
+
+    // req.session.cookie.expires = new Date().getTime();
+    // return res.render('logout');
+
+    // const sessionID = req.session.id;
+    // req.sessionStore.destroy(sessionID, (err) => {
+    // // callback function. If an error occurs, it will be accessible here.
+    // if(err){
+    //     return console.error(err)
+    // }
+    // console.log("The session has been destroyed!");
+    // res.render('logout');
+    // })
+
+    // req.session.destroy();
+    return res.render('logout');
+
 };

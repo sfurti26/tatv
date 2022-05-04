@@ -1,7 +1,7 @@
 const express= require('express');
 const authController = require('../controllers/auth');
 const router=express.Router();
-const multer = require('multer');
+// const multer = require('multer');
 
 router.get('/',(req,res)=>{
     res.render('home');
@@ -39,6 +39,10 @@ router.get('/bookLabTest',(req,res)=>{
 //     res.render('upload');
 // });
 
+// router.get('/editUser', (req, res)=>{
+//     res.render('editUser');
+// });
+
 router.get('/haviewappo', authController.viewappoall);
 router.get('/doctors',authController.fetch);
 router.post('/doctors',authController.add);
@@ -46,6 +50,8 @@ router.get('/upload',authController.upload);
 router.get('/hadash',authController.viewappo);
 router.get('/edit-doctors/:Id',authController.edit);
 router.post('/edit-doctors/:Id',authController.update);
+// router.get('/editUser/:Id',authController.editUser);
+// router.post('/editUser/:Id',authController.updateUser);
 router.get('/:Id',authController.deleteDoc);
 // router.get('/home',authController.logout);
 router.get('/logout',authController.logout);
@@ -61,5 +67,6 @@ router.get('/logout',authController.logout);
 
 // });
 // np
+
 
 module.exports=router;

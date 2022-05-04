@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    {{!--
+    <link rel="stylesheet" href="/about.css"> --}}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+    <style>
+        body{
+            background-color: #fffcf5;
+        }
+        .header-logo {
+            background-color: #fffcf5;
+        }
+
+        .logo-1 {
+            position: relative;
+            height: 5%;
+            width: 8.7%;
+            margin-top: 8px;
+            /* margin-left: 10px;  */
+            left: 220px;
+            margin-top: 0.5%;
+            margin-left: 1.2%;
+            padding-top: 7px;
+            padding-left: 5px;
+            object-fit: cover;
+        }
+        .btn{
+            background-color:#6d350f;
+            color:#fffcf5;
+            
+        }
+
+        .logo-2 {
+            float: right;
+            position: relative;
+            height: 0.3%;
+            width: 5.2%;
+            top: 0.5%;
+            /* right: 1.9%;  */
+            right: 658px;
+            padding-top: 5px;
+            padding-right: 5px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="header-logo">
+                <a href="/"><img class="logo-1" src="../images/tatva_final1.png" alt="Tatv"></a>
+                <span><a href="http://www.banasthali.org/" target="_blank"><img class="logo-2" src="../images/logo.png"
+                            alt="Banasthali Vidyapith"></a></span>
+            </div>
+        </nav>
+        <div class="container pt-10 pb-10">
+            <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='currentColor'/%3E%3C/svg%3E&#34;);"
+                aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/stud_dash">Student Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Edit</li>
+                </ol>
+            </nav>
+            {{#if alert}}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{alert}}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {{/if}}
+            {{#each rows}}
+            <form class="row g-3 needs-validation" method="POST" action="/auth/editUser">
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="idbv" value="{{this.Banasthali_Id}}" name="idbv"
+                            placeholder="idbv">
+                        <label for="floatingInput">Banasthali ID</label>
+                    </div>
+                </div>
+                
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="name" value="{{this.Name}}" name="name"
+                            placeholder="Name">
+                        <label for="floatingInput">Name</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="phone" value="{{this.phone}}"
+                            name="phone" placeholder="Phone">
+                        <label for="floatingInput">Phone</label>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="hostel" value="{{this.hostel}}"
+                            name="hostel" placeholder="hostel">
+                        <label for="floatingInput">Hostel</label>
+                    </div>
+                </div>
+                {{!-- yahn se --}}
+
+                <div class="col-6">
+                    <div class="form-floating mb-3">
+                        <input type="text-box" class="form-control" id="address" value="{{this.address}}"
+                            name="address" placeholder="Address">
+                        <label for="floatingInput">Address</label>
+                    </div>
+                </div>
+                <div class="col-12 d-grid">
+                    <button class="btn" type="submit">Submit</button>
+                </div>
+            </form>
+            {{/each}}
+        </div>
+
+</body>
+
+</html>
