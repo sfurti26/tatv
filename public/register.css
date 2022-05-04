@@ -198,10 +198,10 @@ select {
   display: none;
 }
 .alert-container {
-    position: fixed;
-    bottom: 5px;
-    left:2%;
-    width: 96%;
+  position:relative;
+  bottom: 1px;
+  margin: auto;
+  text-align:center;
 }
 /* @media (max-width: 730px) {
   .container .cover{
