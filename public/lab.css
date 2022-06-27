@@ -34,10 +34,10 @@ letter-spacing: 0px;
 color: #6C340F;
 opacity: 1;
 }
-tr td:first-child:before{
+/* tr td:first-child:before{
 	counter-increment: Serial;      
 	content: counter(Serial); 
-}
+} */
 #labtest {
     font-family: Arial, Helvetica, sans-serif;
     border-collapse: collapse;
